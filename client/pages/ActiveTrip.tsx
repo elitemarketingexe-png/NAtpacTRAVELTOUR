@@ -39,6 +39,7 @@ function useQuery() {
     est: params.get("est") ? Number(params.get("est")) : undefined,
     dist: params.get("dist") ? Number(params.get("dist")) : undefined,
     cost: params.get("cost") ? Number(params.get("cost")) : undefined,
+    cd: params.get("cd") ? (() => { try { return JSON.parse(decodeURIComponent(params.get("cd")!)); } catch { return []; } })() : [],
   } as const;
 }
 
