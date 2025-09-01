@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Bus, Car, Footprints, Train, Minus, Plus, Crosshair, MapPin } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Polyline } from "react-leaflet";
 import L from "leaflet";
@@ -34,6 +34,7 @@ export default function StartTrip() {
   const [userCost, setUserCost] = useState<string>("");
   const [consent, setConsent] = useState<boolean>(() => localStorage.getItem('natpac_consent_v1') === '1');
   const [companionNames, setCompanionNames] = useState<{ name: string; age?: string }[]>([]);
+  const mapRef = useRef<any>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -158,7 +159,7 @@ export default function StartTrip() {
           )}
           <div className="rounded-lg overflow-hidden">
             <div className="h-56 w-full">
-              <MapContainer center={start ?? { lat: 23.2645, lng: 77.4205 }} zoom={start ? 16 : 13} className="h-full w-full" whenCreated={(m) => { (window as any)._leaflet_map = m; m.on('click', (e: any) => setDest({ lat: e.latlng.lat, lng: e.latlng.lng })); }}>
+              <MapContainer center={start ?? { lat: 23.2645, lng: 77.4205 }} zoom={start ? 16 : 13} className="h-full w-full" whenCreated={(m) => { (window as any)._leaflet_map = m; mapRef.current = m; m.on('click', (e: any) => setDest({ lat: e.latlng.lat, lng: e.latlng.lng })); }}>
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                 {route?.coords && <Polyline positions={route.coords as any} pathOptions={{ color: '#7dd3fc', weight: 4, opacity: 0.9 }} />}
                 {start && <Marker position={start as any} icon={L.divIcon({ className: 'pulse-marker-start' })} />}
@@ -166,7 +167,7 @@ export default function StartTrip() {
               </MapContainer>
             </div>
             <div className="flex items-center justify-between p-2 text-xs">
-              <button className="inline-flex items-center gap-1 rounded-md border px-2 py-1" onClick={() => navigator.geolocation?.getCurrentPosition((p) => { const s = { lat: p.coords.latitude, lng: p.coords.longitude }; setStart(s); if ((window as any)._leaflet_map) (window as any)._leaflet_map.flyTo([s.lat, s.lng], 17, { duration: 0.6 }); }, () => {}, { enableHighAccuracy: true })}>
+              <button className="inline-flex items-center gap-1 rounded-md border px-2 py-1" onClick={() => navigator.geolocation?.getCurrentPosition((p) => { const s = { lat: p.coords.latitude, lng: p.coords.longitude }; setStart(s); (mapRef.current ?? (window as any)._leaflet_map)?.flyTo([s.lat, s.lng], 17, { duration: 0.6 }); }, () => {}, { enableHighAccuracy: true })}>
                 <Crosshair size={14}/> Use current location
               </button>
               <div className="text-muted-foreground">Tap map to set destination</div>
