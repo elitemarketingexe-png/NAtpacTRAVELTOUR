@@ -37,7 +37,13 @@ export default function StartTrip() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const id = navigator.geolocation?.getCurrentPosition((p) => setStart({ lat: p.coords.latitude, lng: p.coords.longitude }));
+    navigator.geolocation?.getCurrentPosition((p) => setStart({ lat: p.coords.latitude, lng: p.coords.longitude }));
+    const watch = navigator.geolocation?.watchPosition((p) => {
+      const s = { lat: p.coords.latitude, lng: p.coords.longitude };
+      setStart(s);
+      if ((window as any)._leaflet_map) (window as any)._leaflet_map.flyTo([s.lat, s.lng], 16, { duration: 0.4 });
+    }, undefined, { enableHighAccuracy: true, maximumAge: 1000 });
+    return () => { if (watch && typeof watch === 'number') navigator.geolocation.clearWatch(watch); };
   }, []);
 
   useEffect(() => {
