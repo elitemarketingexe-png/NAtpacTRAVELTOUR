@@ -27,7 +27,7 @@ export function TripCard({ trip, index }: { trip: TripRecord; index: number }) {
       exit={{ opacity: 0, y: -8, scale: 0.98 }}
       transition={{ duration: 0.35, delay: index * 0.03, ease: [0.22, 1, 0.36, 1] }}
     >
-      <Link to={`/trip/${trip.tripId}`} className="block">
+      <Link to={`/trips/${trip.tripId}`} className="block">
         <Card
           className="relative overflow-hidden p-3 text-sm group"
           onPointerMove={(e) => {
