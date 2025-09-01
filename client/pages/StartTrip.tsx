@@ -120,10 +120,22 @@ export default function StartTrip() {
               <div className="text-muted-foreground">Tap map to set destination</div>
             </div>
           </div>
+          {route && (
+            <div className="rounded-md border p-2 text-xs flex items-center justify-between">
+              <div>
+                <div>Suggested path ~ {route.distanceKm?.toFixed(1)} km • {Math.round(route.durationMin ?? 0)} min</div>
+                {estCost !== null && <div className="text-muted-foreground">Estimated cost ₹{estCost}</div>}
+              </div>
+              <div className="flex items-center gap-2">
+                <Label className="text-xs">Your cost</Label>
+                <Input className="h-8 w-24" value={userCost} onChange={(e) => setUserCost(e.target.value)} placeholder="₹" />
+              </div>
+            </div>
+          )}
           {alternative && (
             <div className="rounded-md border p-2 text-xs">We found an earlier trip to this destination. You can compare after recording to get an alternative suggestion.</div>
           )}
-          <Button className="w-full" onClick={startTrip}>Start</Button>
+          <Button className="w-full" onClick={() => { const params = new URLSearchParams({ mode, purpose, companions: String(companions) }); if (start) { params.set('slat', String(start.lat)); params.set('slng', String(start.lng)); } if (dest) { params.set('dlat', String(dest.lat)); params.set('dlng', String(dest.lng)); params.set('dname', destText); } if (route) { params.set('est', String(estCost ?? '')); params.set('dist', String(route.distanceKm)); } if (userCost) params.set('cost', userCost); navigate(`/trip/active?${params.toString()}`); }}>Start</Button>
         </Card>
 
         <Card className="p-4 text-xs text-muted-foreground">
