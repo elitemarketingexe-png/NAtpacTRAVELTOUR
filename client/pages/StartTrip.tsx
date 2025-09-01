@@ -49,6 +49,32 @@ export default function StartTrip() {
     return () => clearTimeout(handler);
   }, [destText]);
 
+  // Compute route and focus map when both points are set
+  useEffect(() => {
+    (async () => {
+      if (start && dest) {
+        const r = await fetchRoute(start, dest);
+        setRoute(r);
+        if (r && (window as any)._leaflet_map) {
+          const bounds = L.latLngBounds(r.coords.map((c) => L.latLng(c[0], c[1])));
+          (window as any)._leaflet_map.fitBounds(bounds, { padding: [24,24] });
+          const rate = 6;
+          setEstCost(Math.round(r.distanceKm * rate));
+        }
+      } else {
+        setRoute(null);
+        setEstCost(null);
+      }
+    })();
+  }, [start, dest]);
+
+  // Fly to destination when chosen
+  useEffect(() => {
+    if (dest && (window as any)._leaflet_map) {
+      (window as any)._leaflet_map.flyTo([dest.lat, dest.lng], 16, { duration: 0.4 });
+    }
+  }, [dest]);
+
   const alternative = useMemo(() => {
     const trips = listTrips();
     if (!destText) return null;
