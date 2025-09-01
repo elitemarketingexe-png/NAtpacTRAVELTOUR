@@ -5,8 +5,8 @@ import { cn } from "@/lib/utils";
 export function BottomNav() {
   const items = [
     { to: "/", label: "Home", icon: Home },
-    { to: "/routes", label: "Routes", icon: Route },
-    { to: "/notifications", label: "Alerts", icon: Bell },
+    { to: "/places", label: "Places", icon: MapPin },
+    { to: "/trips", label: "Trips", icon: List },
     { to: "/profile", label: "Profile", icon: User }
   ];
   return (
