@@ -12,6 +12,9 @@ export type TripRecord = {
   path: LatLng[];
   stops: LatLng[];
   pois: { busStops: string[]; metro: string[]; attractions: string[] };
+  distanceKm?: number | null;
+  costEstimate?: number | null;
+  costActual?: number | null;
 };
 
 const LS_KEYS = {
