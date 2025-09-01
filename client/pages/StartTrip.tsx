@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Polyline } from "react-leaflet";
 import L from "leaflet";
 import { listTrips } from "@/lib/storage";
+import { fetchRoute } from "@/lib/route";
 
 const modes = [
   { key: "walk", label: "Walk", icon: Footprints },
