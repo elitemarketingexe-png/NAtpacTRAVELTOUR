@@ -166,7 +166,7 @@ export default function StartTrip() {
               </MapContainer>
             </div>
             <div className="flex items-center justify-between p-2 text-xs">
-              <button className="inline-flex items-center gap-1 rounded-md border px-2 py-1" onClick={() => navigator.geolocation?.getCurrentPosition((p) => setStart({ lat: p.coords.latitude, lng: p.coords.longitude }), () => {}, { enableHighAccuracy: true })}>
+              <button className="inline-flex items-center gap-1 rounded-md border px-2 py-1" onClick={() => navigator.geolocation?.getCurrentPosition((p) => { const s = { lat: p.coords.latitude, lng: p.coords.longitude }; setStart(s); if ((window as any)._leaflet_map) (window as any)._leaflet_map.flyTo([s.lat, s.lng], 17, { duration: 0.6 }); }, () => {}, { enableHighAccuracy: true })}>
                 <Crosshair size={14}/> Use current location
               </button>
               <div className="text-muted-foreground">Tap map to set destination</div>
