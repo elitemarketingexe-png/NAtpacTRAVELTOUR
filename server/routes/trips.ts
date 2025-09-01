@@ -14,7 +14,7 @@ export const postTrip: RequestHandler = (req, res) => {
     ensureDir();
     const t = req.body ?? {};
     const headers = [
-      "tripId","userId","startedAt","endedAt","mode","purpose","companions","startLat","startLng","destName","destLat","destLng","distanceKm","costEstimate","costActual","pathPoints","busStops","metro","attractions"
+      "tripId","userId","startedAt","endedAt","mode","purpose","companions","companionsDetails","startLat","startLng","destName","destLat","destLng","distanceKm","costEstimate","costActual","pathPoints","busStops","metro","attractions"
     ];
     const row = [
       t.tripId,
