@@ -187,7 +187,11 @@ export default function StartTrip() {
           {alternative && (
             <div className="rounded-md border p-2 text-xs">We found an earlier trip to this destination. You can compare after recording to get an alternative suggestion.</div>
           )}
-          <Button className="w-full" onClick={() => { const params = new URLSearchParams({ mode, purpose, companions: String(companions) }); if (start) { params.set('slat', String(start.lat)); params.set('slng', String(start.lng)); } if (dest) { params.set('dlat', String(dest.lat)); params.set('dlng', String(dest.lng)); params.set('dname', destText); } if (route) { params.set('est', String(estCost ?? '')); params.set('dist', String(route.distanceKm)); } if (userCost) params.set('cost', userCost); navigate(`/trip/active?${params.toString()}`); }}>Start</Button>
+          <div className="flex items-center gap-2 text-xs">
+            <input id="consent" type="checkbox" checked={consent} onChange={(e) => { setConsent(e.target.checked); if (e.target.checked) localStorage.setItem('natpac_consent_v1','1'); }} />
+            <label htmlFor="consent">I consent to share trip data (origin, destination, path, companions) for research by NATPAC.</label>
+          </div>
+          <Button className="w-full" disabled={!consent} onClick={startTrip}>Start</Button>
         </Card>
 
         <Card className="p-4 text-xs text-muted-foreground">
