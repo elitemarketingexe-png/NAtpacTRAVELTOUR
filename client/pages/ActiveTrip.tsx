@@ -112,6 +112,25 @@ export default function ActiveTrip() {
             </MapContainer>
           </div>
         </Card>
+        {suggestions && (
+          <Card className="p-3 text-sm">
+            <div className="font-medium mb-1">Popular places nearby</div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <div>
+                <div className="text-xs text-muted-foreground">Bus stops</div>
+                <ul className="list-disc pl-4 text-xs">{suggestions.busStops.slice(0,5).map((n,i)=>(<li key={i}>{n}</li>))}</ul>
+              </div>
+              <div>
+                <div className="text-xs text-muted-foreground">Metro</div>
+                <ul className="list-disc pl-4 text-xs">{suggestions.metro.slice(0,3).map((n,i)=>(<li key={i}>{n}</li>))}</ul>
+              </div>
+              <div>
+                <div className="text-xs text-muted-foreground">Attractions</div>
+                <ul className="list-disc pl-4 text-xs">{suggestions.attractions.slice(0,5).map((n,i)=>(<li key={i}>{n}</li>))}</ul>
+              </div>
+            </div>
+          </Card>
+        )}
         <Card className="p-3 grid grid-cols-4 gap-2 items-center">
           <Button variant="destructive" className="col-span-2" onClick={() => (window.location.href = "/trips") }>
             <X className="mr-2 h-4 w-4"/> Emergency Stop
