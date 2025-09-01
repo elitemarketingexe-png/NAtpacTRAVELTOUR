@@ -140,11 +140,22 @@ export default function StartTrip() {
           <div className="flex items-center justify-between">
             <div className="text-sm">Companions</div>
             <div className="flex items-center gap-2">
-              <button className="h-8 w-8 grid place-items-center rounded-md border" onClick={() => setCompanions((v) => Math.max(0, v - 1))}><Minus size={16}/></button>
+              <button className="h-8 w-8 grid place-items-center rounded-md border" onClick={() => { setCompanions((v) => Math.max(0, v - 1)); setCompanionNames((arr) => arr.slice(0, Math.max(0, companions - 1))); }}><Minus size={16}/></button>
               <Badge variant="secondary">{companions}</Badge>
-              <button className="h-8 w-8 grid place-items-center rounded-md border" onClick={() => setCompanions((v) => v + 1)}><Plus size={16}/></button>
+              <button className="h-8 w-8 grid place-items-center rounded-md border" onClick={() => { setCompanions((v) => v + 1); setCompanionNames((arr) => [...arr, { name: "" }]); }}><Plus size={16}/></button>
             </div>
           </div>
+          {!!companions && (
+            <div className="grid gap-2">
+              {Array.from({ length: companions }).map((_, i) => (
+                <div key={i} className="grid grid-cols-5 gap-2 items-center">
+                  <Label className="col-span-2 text-xs">Companion {i+1} name</Label>
+                  <Input className="col-span-2 h-8" value={companionNames[i]?.name ?? ''} onChange={(e) => setCompanionNames((arr) => { const next=[...arr]; if (!next[i]) next[i]={ name: '' }; next[i].name=e.target.value; return next; })} />
+                  <Input className="col-span-1 h-8" placeholder="Age" value={(companionNames[i]?.age ?? '') as any} onChange={(e) => setCompanionNames((arr) => { const next=[...arr]; if (!next[i]) next[i]={ name: '' }; next[i].age=e.target.value; return next; })} />
+                </div>
+              ))}
+            </div>
+          )}
           <div className="rounded-lg overflow-hidden">
             <div className="h-56 w-full">
               <MapContainer center={start ?? { lat: 23.2645, lng: 77.4205 }} zoom={start ? 16 : 13} className="h-full w-full" whenCreated={(m) => { (window as any)._leaflet_map = m; m.on('click', (e: any) => setDest({ lat: e.latlng.lat, lng: e.latlng.lng })); }}>
