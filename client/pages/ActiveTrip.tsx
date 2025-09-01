@@ -47,12 +47,25 @@ export default function ActiveTrip() {
   const q = useQuery();
   const [paused, setPaused] = useState(false);
   const [batterySave, setBatterySave] = useState(true);
+  const [suggestions, setSuggestions] = useState<{ busStops: string[]; metro: string[]; attractions: string[] } | null>(null);
   const mapRef = useRef<any>(null);
   const startedAt = useRef<number>(Date.now());
 
   const { coords, pos } = useTripPath(!paused, (p) => {
     if (mapRef.current) mapRef.current.flyTo(p as any, 18, { duration: 0.5 });
   });
+
+  useEffect(() => {
+    let t: any;
+    (async () => {
+      if (pos) setSuggestions(await fetchNearbyPois(pos[0], pos[1]));
+    })();
+    t = setInterval(async () => {
+      const p = pos;
+      if (p) setSuggestions(await fetchNearbyPois(p[0], p[1]));
+    }, 15000);
+    return () => clearInterval(t);
+  }, [pos?.[0], pos?.[1]]);
 
   const center = pos ?? (q.start ?? [23.2645, 77.4205]);
 
