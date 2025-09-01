@@ -32,6 +32,8 @@ export default function StartTrip() {
   const [route, setRoute] = useState<{coords:[number,number][], distanceKm:number, durationMin:number} | null>(null);
   const [estCost, setEstCost] = useState<number | null>(null);
   const [userCost, setUserCost] = useState<string>("");
+  const [consent, setConsent] = useState<boolean>(() => localStorage.getItem('natpac_consent_v1') === '1');
+  const [companionNames, setCompanionNames] = useState<{ name: string; age?: string }[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
