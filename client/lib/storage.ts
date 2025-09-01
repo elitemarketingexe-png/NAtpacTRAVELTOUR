@@ -59,3 +59,32 @@ export function saveTrip(partial: Omit<TripRecord, "tripId" | "userId">): TripRe
   localStorage.setItem(LS_KEYS.trips, JSON.stringify(trips));
   return record;
 }
+
+export function tripsToCSV(trips: TripRecord[]): string {
+  const headers = [
+    "tripId","userId","startedAt","endedAt","mode","purpose","companions","startLat","startLng","destName","destLat","destLng","distanceKm","costEstimate","costActual","pathPoints","busStops","metro","attractions"
+  ];
+  const rows = trips.map(t => [
+    t.tripId,
+    t.userId,
+    new Date(t.startedAt).toISOString(),
+    new Date(t.endedAt).toISOString(),
+    t.mode,
+    t.purpose,
+    t.companions,
+    t.start.lat,
+    t.start.lng,
+    t.destination?.name ?? "",
+    t.destination?.position?.lat ?? "",
+    t.destination?.position?.lng ?? "",
+    t.distanceKm ?? "",
+    t.costEstimate ?? "",
+    t.costActual ?? "",
+    t.path.length,
+    (t.pois?.busStops || []).join(";"),
+    (t.pois?.metro || []).join(";"),
+    (t.pois?.attractions || []).join(";"),
+  ]);
+  const csv = [headers.join(","), ...rows.map(r => r.map(v => String(v).replaceAll('"', '""')).join(","))].join("\n");
+  return csv;
+}
