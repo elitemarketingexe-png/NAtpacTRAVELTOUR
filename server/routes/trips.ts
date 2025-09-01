@@ -24,6 +24,7 @@ export const postTrip: RequestHandler = (req, res) => {
       t.mode,
       t.purpose,
       t.companions,
+      Array.isArray(t.companionsDetails) ? JSON.stringify(t.companionsDetails) : "",
       t.start?.lat,
       t.start?.lng,
       t.destination?.name ?? "",
