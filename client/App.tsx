@@ -40,6 +40,7 @@ const App = () => (
           <Route path="/" element={<RequireAuth><Index /></RequireAuth>} />
           <Route path="/places" element={<RequireAuth><Places /></RequireAuth>} />
           <Route path="/trips" element={<RequireAuth><Trips /></RequireAuth>} />
+          <Route path="/trips/:id" element={<RequireAuth><TripDetail /></RequireAuth>} />
           <Route path="/trip/start" element={<RequireAuth><StartTrip /></RequireAuth>} />
           <Route path="/trip/active" element={<RequireAuth><ActiveTrip /></RequireAuth>} />
           <Route path="/profile" element={<RequireAuth><Profile /></RequireAuth>} />
