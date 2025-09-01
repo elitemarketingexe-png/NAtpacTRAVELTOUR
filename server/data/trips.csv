@@ -1,0 +1,1 @@
+tripId,userId,startedAt,endedAt,mode,purpose,companions,startLat,startLng,destName,destLat,destLng,distanceKm,costEstimate,costActual,pathPoints,busStops,metro,attractions

@@ -137,10 +137,11 @@ export default function StartTrip() {
           </div>
           <div className="rounded-lg overflow-hidden">
             <div className="h-56 w-full">
-              <MapContainer center={start ?? { lat: 23.2645, lng: 77.4205 }} zoom={start ? 16 : 13} className="h-full w-full" whenCreated={(m) => m.on('click', (e: any) => setDest({ lat: e.latlng.lat, lng: e.latlng.lng }))}>
+              <MapContainer center={start ?? { lat: 23.2645, lng: 77.4205 }} zoom={start ? 16 : 13} className="h-full w-full" whenCreated={(m) => { (window as any)._leaflet_map = m; m.on('click', (e: any) => setDest({ lat: e.latlng.lat, lng: e.latlng.lng })); }}>
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                {start && <Marker position={start as any} icon={L.divIcon({ className: 'pulse-marker' })} />}
-                {dest && <Marker position={dest as any} icon={L.divIcon({ className: 'pulse-marker' })} />}
+                {route?.coords && <Polyline positions={route.coords as any} pathOptions={{ color: '#7dd3fc', weight: 4, opacity: 0.9 }} />}
+                {start && <Marker position={start as any} icon={L.divIcon({ className: 'pulse-marker-start' })} />}
+                {dest && <Marker position={dest as any} icon={L.divIcon({ className: 'pin-dest' })} />}
               </MapContainer>
             </div>
             <div className="flex items-center justify-between p-2 text-xs">
