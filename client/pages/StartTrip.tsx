@@ -27,7 +27,7 @@ export default function StartTrip() {
   const [start, setStart] = useState<{lat:number;lng:number} | null>(null);
   const [destText, setDestText] = useState("");
   const [dest, setDest] = useState<{lat:number;lng:number} | null>(null);
-  const [results, setResults] = useState<{display_name:string; lat:string; lon:string}[]>([]);
+  const [results, setResults] = useState<{place_id?: number | string; display_name:string; lat:string; lon:string}[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
