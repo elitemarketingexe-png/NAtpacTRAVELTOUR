@@ -90,6 +90,7 @@ export default function StartTrip() {
   }, [destText]);
 
   const startTrip = () => {
+    if (!consent) return;
     const params = new URLSearchParams({
       mode,
       purpose,
@@ -97,6 +98,7 @@ export default function StartTrip() {
     });
     if (start) { params.set("slat", String(start.lat)); params.set("slng", String(start.lng)); }
     if (dest) { params.set("dlat", String(dest.lat)); params.set("dlng", String(dest.lng)); params.set("dname", destText); }
+    if (companionNames.length) params.set('cd', encodeURIComponent(JSON.stringify(companionNames)));
     navigate(`/trip/active?${params.toString()}`);
   };
 
