@@ -103,3 +103,33 @@
     @apply bg-background text-foreground antialiased;
   }
 }
+
+@layer components {
+  .pulse-marker {
+    position: relative;
+    width: 16px;
+    height: 16px;
+  }
+  .pulse-marker::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    background: radial-gradient(circle at 30% 30%, hsl(var(--accent)) 0%, hsl(var(--primary)) 60%);
+    box-shadow: 0 4px 12px rgba(0,0,0,.25);
+  }
+  .pulse-marker::after {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    border-radius: 9999px;
+    border: 2px solid hsl(var(--accent));
+    opacity: .6;
+    animation: pulse 1.4s infinite;
+  }
+  @keyframes pulse {
+    0% { transform: scale(0.8); opacity: .7; }
+    70% { transform: scale(1.2); opacity: .1; }
+    100% { transform: scale(0.8); opacity: .7; }
+  }
+}
