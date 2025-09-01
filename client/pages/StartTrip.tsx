@@ -120,7 +120,7 @@ export default function StartTrip() {
             {!!results.length && (
               <div className="rounded-md border bg-background shadow divide-y">
                 {results.map((r, idx) => (
-                  <button key={`${r.place_id ?? idx}-${r.lat}-${r.lon}`} className="w-full text-left px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground" onClick={() => { setDest({ lat: parseFloat(r.lat), lng: parseFloat(r.lon) }); setResults([]); }}>
+                  <button key={`${r.place_id ?? idx}-${r.lat}-${r.lon}`} className="w-full text-left px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground" onClick={() => { const d={ lat: parseFloat(r.lat), lng: parseFloat(r.lon) }; setDest(d); setDestText(r.display_name); setResults([]); if ((window as any)._leaflet_map) (window as any)._leaflet_map.flyTo([d.lat, d.lng], 16, { duration: 0.4 }); }}>
                     {r.display_name}
                   </button>
                 ))}
