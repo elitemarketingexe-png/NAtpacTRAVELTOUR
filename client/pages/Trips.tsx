@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { listTrips, tripsToCSV, type TripRecord } from "@/lib/storage";
 import { useMemo, useState } from "react";
 import { motion, AnimatePresence, MotionConfig } from "framer-motion";
-import { Download, Filter, Search, ArrowUpDown, MapPin, Route as RouteIcon } from "lucide-react";
+import { Download, Filter, Search, ArrowUpDown, MapPin } from "lucide-react";
 import { TripCard } from "@/components/TripCard";
 
 function statFmt(n: number) { return n.toLocaleString(); }
