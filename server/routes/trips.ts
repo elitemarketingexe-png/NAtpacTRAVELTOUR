@@ -42,6 +42,8 @@ export const postTrip: RequestHandler = (req, res) => {
     const line = row.map((v) => String(v ?? "").replaceAll('"','""')).join(",") + "\n";
     if (!fs.existsSync(csvPath)) fs.writeFileSync(csvPath, headers.join(",") + "\n");
     fs.appendFileSync(csvPath, line);
+    // append JSON line
+    fs.appendFileSync(jsonlPath, JSON.stringify(t) + "\n");
     res.json({ ok: true });
   } catch (e) {
     res.status(500).json({ ok: false, error: String(e) });
