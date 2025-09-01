@@ -1,4 +1,4 @@
-import { Home, Route, Bell, User, TramFront } from "lucide-react";
+import { Home, MapPin, List, User } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
