@@ -89,8 +89,8 @@ export default function StartTrip() {
             <Input value={destText} onChange={(e) => setDestText(e.target.value)} placeholder="Search place or tap on map" />
             {!!results.length && (
               <div className="rounded-md border bg-background shadow divide-y">
-                {results.map((r) => (
-                  <button key={r.display_name} className="w-full text-left px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground" onClick={() => { setDest({ lat: parseFloat(r.lat), lng: parseFloat(r.lon) }); setResults([]); }}>
+                {results.map((r, idx) => (
+                  <button key={`${r.place_id ?? idx}-${r.lat}-${r.lon}`} className="w-full text-left px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground" onClick={() => { setDest({ lat: parseFloat(r.lat), lng: parseFloat(r.lon) }); setResults([]); }}>
                     {r.display_name}
                   </button>
                 ))}
