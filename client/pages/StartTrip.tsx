@@ -29,6 +29,9 @@ export default function StartTrip() {
   const [destText, setDestText] = useState("");
   const [dest, setDest] = useState<{lat:number;lng:number} | null>(null);
   const [results, setResults] = useState<{place_id?: number | string; display_name:string; lat:string; lon:string}[]>([]);
+  const [route, setRoute] = useState<{coords:[number,number][], distanceKm:number, durationMin:number} | null>(null);
+  const [estCost, setEstCost] = useState<number | null>(null);
+  const [userCost, setUserCost] = useState<string>("");
   const navigate = useNavigate();
 
   useEffect(() => {
