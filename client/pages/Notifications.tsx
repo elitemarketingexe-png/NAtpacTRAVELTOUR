@@ -14,19 +14,25 @@ export default function Notifications() {
           <div className="flex items-center justify-between p-4">
             <div>
               <div className="text-sm font-semibold">Arrival reminders</div>
-              <div className="text-xs text-muted-foreground">Notify 3–5 minutes before your bus arrives</div>
+              <div className="text-xs text-muted-foreground">
+                Notify 3–5 minutes before your bus arrives
+              </div>
             </div>
             <Switch checked={arrival} onCheckedChange={setArrival} />
           </div>
           <div className="flex items-center justify-between p-4">
             <div>
               <div className="text-sm font-semibold">Delays & disruptions</div>
-              <div className="text-xs text-muted-foreground">Get alerts for unusual delays or route changes</div>
+              <div className="text-xs text-muted-foreground">
+                Get alerts for unusual delays or route changes
+              </div>
             </div>
             <Switch checked={disruptions} onCheckedChange={setDisruptions} />
           </div>
         </Card>
-        <Card className="p-4 text-sm text-muted-foreground">Recent alerts will appear here.</Card>
+        <Card className="p-4 text-sm text-muted-foreground">
+          Recent alerts will appear here.
+        </Card>
       </section>
     </Layout>
   );

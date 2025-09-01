@@ -33,7 +33,10 @@ export function polylineLength(poly: LatLng[]): number {
   return sum; // meters
 }
 
-export function positionAlongPolyline(poly: LatLng[], progress: number): LatLng {
+export function positionAlongPolyline(
+  poly: LatLng[],
+  progress: number,
+): LatLng {
   const total = polylineLength(poly);
   let target = total * progress;
   for (let i = 1; i < poly.length; i++) {
@@ -76,7 +79,8 @@ export function initBusesForRoutes(routes: BusRoute[]): BusLive[] {
   return routes.flatMap((r, idx) => {
     const busesOnRoute = 2;
     return Array.from({ length: busesOnRoute }, (_, i) => {
-      const progress = ((i + 1) / (busesOnRoute + 1)) * (idx % 2 === 0 ? 1 : 0.6);
+      const progress =
+        ((i + 1) / (busesOnRoute + 1)) * (idx % 2 === 0 ? 1 : 0.6);
       return {
         id: `${r.id}-B${i + 1}`,
         routeId: r.id,
@@ -85,7 +89,7 @@ export function initBusesForRoutes(routes: BusRoute[]): BusLive[] {
         crowdLevel: Math.floor(Math.random() * 4) as 0 | 1 | 2 | 3,
         lastUpdated: now,
         direction: Math.random() > 0.5 ? 1 : -1,
-        progress
+        progress,
       } satisfies BusLive;
     });
   });

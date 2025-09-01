@@ -4,7 +4,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Bus, Car, Footprints, Train, Minus, Plus, Crosshair, MapPin } from "lucide-react";
+import {
+  Bus,
+  Car,
+  Footprints,
+  Train,
+  Minus,
+  Plus,
+  Crosshair,
+  MapPin,
+} from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Polyline } from "react-leaflet";
@@ -16,42 +25,74 @@ const modes = [
   { key: "walk", label: "Walk", icon: Footprints },
   { key: "car", label: "Car", icon: Car },
   { key: "bus", label: "Bus", icon: Bus },
-  { key: "train", label: "Train", icon: Train }
+  { key: "train", label: "Train", icon: Train },
 ] as const;
 
-type ModeKey = typeof modes[number]["key"];
+type ModeKey = (typeof modes)[number]["key"];
 
 export default function StartTrip() {
   const [purpose, setPurpose] = useState("Work");
   const [companions, setCompanions] = useState(0);
   const [mode, setMode] = useState<ModeKey>("bus");
-  const [start, setStart] = useState<{lat:number;lng:number} | null>(null);
+  const [start, setStart] = useState<{ lat: number; lng: number } | null>(null);
   const [destText, setDestText] = useState("");
-  const [dest, setDest] = useState<{lat:number;lng:number} | null>(null);
-  const [results, setResults] = useState<{place_id?: number | string; display_name:string; lat:string; lon:string}[]>([]);
-  const [route, setRoute] = useState<{coords:[number,number][], distanceKm:number, durationMin:number} | null>(null);
+  const [dest, setDest] = useState<{ lat: number; lng: number } | null>(null);
+  const [results, setResults] = useState<
+    {
+      place_id?: number | string;
+      display_name: string;
+      lat: string;
+      lon: string;
+    }[]
+  >([]);
+  const [route, setRoute] = useState<{
+    coords: [number, number][];
+    distanceKm: number;
+    durationMin: number;
+  } | null>(null);
   const [estCost, setEstCost] = useState<number | null>(null);
   const [userCost, setUserCost] = useState<string>("");
-  const [consent, setConsent] = useState<boolean>(() => localStorage.getItem('natpac_consent_v1') === '1');
-  const [companionNames, setCompanionNames] = useState<{ name: string; age?: string }[]>([]);
+  const [consent, setConsent] = useState<boolean>(
+    () => localStorage.getItem("natpac_consent_v1") === "1",
+  );
+  const [companionNames, setCompanionNames] = useState<
+    { name: string; age?: string }[]
+  >([]);
   const mapRef = useRef<any>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    navigator.geolocation?.getCurrentPosition((p) => setStart({ lat: p.coords.latitude, lng: p.coords.longitude }));
-    const watch = navigator.geolocation?.watchPosition((p) => {
-      const s = { lat: p.coords.latitude, lng: p.coords.longitude };
-      setStart(s);
-      if ((window as any)._leaflet_map) (window as any)._leaflet_map.flyTo([s.lat, s.lng], 16, { duration: 0.4 });
-    }, undefined, { enableHighAccuracy: true, maximumAge: 1000 });
-    return () => { if (watch && typeof watch === 'number') navigator.geolocation.clearWatch(watch); };
+    navigator.geolocation?.getCurrentPosition((p) =>
+      setStart({ lat: p.coords.latitude, lng: p.coords.longitude }),
+    );
+    const watch = navigator.geolocation?.watchPosition(
+      (p) => {
+        const s = { lat: p.coords.latitude, lng: p.coords.longitude };
+        setStart(s);
+        if ((window as any)._leaflet_map)
+          (window as any)._leaflet_map.flyTo([s.lat, s.lng], 16, {
+            duration: 0.4,
+          });
+      },
+      undefined,
+      { enableHighAccuracy: true, maximumAge: 1000 },
+    );
+    return () => {
+      if (watch && typeof watch === "number")
+        navigator.geolocation.clearWatch(watch);
+    };
   }, []);
 
   useEffect(() => {
     const handler = setTimeout(async () => {
-      if (!destText.trim()) { setResults([]); return; }
+      if (!destText.trim()) {
+        setResults([]);
+        return;
+      }
       const q = encodeURIComponent(destText.trim());
-      const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=5`);
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=5`,
+      );
       const data = await res.json();
       setResults(data);
     }, 350);
@@ -65,8 +106,10 @@ export default function StartTrip() {
         const r = await fetchRoute(start, dest);
         setRoute(r);
         if (r && (window as any)._leaflet_map) {
-          const bounds = L.latLngBounds(r.coords.map((c) => L.latLng(c[0], c[1])));
-          (window as any)._leaflet_map.fitBounds(bounds, { padding: [24,24] });
+          const bounds = L.latLngBounds(
+            r.coords.map((c) => L.latLng(c[0], c[1])),
+          );
+          (window as any)._leaflet_map.fitBounds(bounds, { padding: [24, 24] });
           const rate = 6;
           setEstCost(Math.round(r.distanceKm * rate));
         }
@@ -80,14 +123,22 @@ export default function StartTrip() {
   // Fly to destination when chosen
   useEffect(() => {
     if (dest && (window as any)._leaflet_map) {
-      (window as any)._leaflet_map.flyTo([dest.lat, dest.lng], 16, { duration: 0.4 });
+      (window as any)._leaflet_map.flyTo([dest.lat, dest.lng], 16, {
+        duration: 0.4,
+      });
     }
   }, [dest]);
 
   const alternative = useMemo(() => {
     const trips = listTrips();
     if (!destText) return null;
-    return trips.find(t => (t.destination?.name || "").toLowerCase().includes(destText.toLowerCase())) || null;
+    return (
+      trips.find((t) =>
+        (t.destination?.name || "")
+          .toLowerCase()
+          .includes(destText.toLowerCase()),
+      ) || null
+    );
   }, [destText]);
 
   const startTrip = () => {
@@ -97,9 +148,17 @@ export default function StartTrip() {
       purpose,
       companions: String(companions),
     });
-    if (start) { params.set("slat", String(start.lat)); params.set("slng", String(start.lng)); }
-    if (dest) { params.set("dlat", String(dest.lat)); params.set("dlng", String(dest.lng)); params.set("dname", destText); }
-    if (companionNames.length) params.set('cd', encodeURIComponent(JSON.stringify(companionNames)));
+    if (start) {
+      params.set("slat", String(start.lat));
+      params.set("slng", String(start.lng));
+    }
+    if (dest) {
+      params.set("dlat", String(dest.lat));
+      params.set("dlng", String(dest.lng));
+      params.set("dname", destText);
+    }
+    if (companionNames.length)
+      params.set("cd", encodeURIComponent(JSON.stringify(companionNames)));
     navigate(`/trip/active?${params.toString()}`);
   };
 
@@ -123,15 +182,39 @@ export default function StartTrip() {
           </div>
           <div className="grid gap-2">
             <Label>Trip purpose</Label>
-            <Input value={purpose} onChange={(e) => setPurpose(e.target.value)} placeholder="e.g., Work, Shopping" />
+            <Input
+              value={purpose}
+              onChange={(e) => setPurpose(e.target.value)}
+              placeholder="e.g., Work, Shopping"
+            />
           </div>
           <div className="grid gap-2">
             <Label>Destination</Label>
-            <Input value={destText} onChange={(e) => setDestText(e.target.value)} placeholder="Search place or tap on map" />
+            <Input
+              value={destText}
+              onChange={(e) => setDestText(e.target.value)}
+              placeholder="Search place or tap on map"
+            />
             {!!results.length && (
               <div className="rounded-md border bg-background shadow divide-y">
                 {results.map((r, idx) => (
-                  <button key={`${r.place_id ?? idx}-${r.lat}-${r.lon}`} className="w-full text-left px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground" onClick={() => { const d={ lat: parseFloat(r.lat), lng: parseFloat(r.lon) }; setDest(d); setDestText(r.display_name); setResults([]); if ((window as any)._leaflet_map) (window as any)._leaflet_map.flyTo([d.lat, d.lng], 16, { duration: 0.4 }); }}>
+                  <button
+                    key={`${r.place_id ?? idx}-${r.lat}-${r.lon}`}
+                    className="w-full text-left px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground"
+                    onClick={() => {
+                      const d = {
+                        lat: parseFloat(r.lat),
+                        lng: parseFloat(r.lon),
+                      };
+                      setDest(d);
+                      setDestText(r.display_name);
+                      setResults([]);
+                      if ((window as any)._leaflet_map)
+                        (window as any)._leaflet_map.flyTo([d.lat, d.lng], 16, {
+                          duration: 0.4,
+                        });
+                    }}
+                  >
                     {r.display_name}
                   </button>
                 ))}
@@ -141,62 +224,183 @@ export default function StartTrip() {
           <div className="flex items-center justify-between">
             <div className="text-sm">Companions</div>
             <div className="flex items-center gap-2">
-              <button className="h-8 w-8 grid place-items-center rounded-md border" onClick={() => { setCompanions((v) => Math.max(0, v - 1)); setCompanionNames((arr) => arr.slice(0, Math.max(0, companions - 1))); }}><Minus size={16}/></button>
+              <button
+                className="h-8 w-8 grid place-items-center rounded-md border"
+                onClick={() => {
+                  setCompanions((v) => Math.max(0, v - 1));
+                  setCompanionNames((arr) =>
+                    arr.slice(0, Math.max(0, companions - 1)),
+                  );
+                }}
+              >
+                <Minus size={16} />
+              </button>
               <Badge variant="secondary">{companions}</Badge>
-              <button className="h-8 w-8 grid place-items-center rounded-md border" onClick={() => { setCompanions((v) => v + 1); setCompanionNames((arr) => [...arr, { name: "" }]); }}><Plus size={16}/></button>
+              <button
+                className="h-8 w-8 grid place-items-center rounded-md border"
+                onClick={() => {
+                  setCompanions((v) => v + 1);
+                  setCompanionNames((arr) => [...arr, { name: "" }]);
+                }}
+              >
+                <Plus size={16} />
+              </button>
             </div>
           </div>
           {!!companions && (
             <div className="grid gap-2">
               {Array.from({ length: companions }).map((_, i) => (
                 <div key={i} className="grid grid-cols-5 gap-2 items-center">
-                  <Label className="col-span-2 text-xs">Companion {i+1} name</Label>
-                  <Input className="col-span-2 h-8" value={companionNames[i]?.name ?? ''} onChange={(e) => setCompanionNames((arr) => { const next=[...arr]; if (!next[i]) next[i]={ name: '' }; next[i].name=e.target.value; return next; })} />
-                  <Input className="col-span-1 h-8" placeholder="Age" value={(companionNames[i]?.age ?? '') as any} onChange={(e) => setCompanionNames((arr) => { const next=[...arr]; if (!next[i]) next[i]={ name: '' }; next[i].age=e.target.value; return next; })} />
+                  <Label className="col-span-2 text-xs">
+                    Companion {i + 1} name
+                  </Label>
+                  <Input
+                    className="col-span-2 h-8"
+                    value={companionNames[i]?.name ?? ""}
+                    onChange={(e) =>
+                      setCompanionNames((arr) => {
+                        const next = [...arr];
+                        if (!next[i]) next[i] = { name: "" };
+                        next[i].name = e.target.value;
+                        return next;
+                      })
+                    }
+                  />
+                  <Input
+                    className="col-span-1 h-8"
+                    placeholder="Age"
+                    value={(companionNames[i]?.age ?? "") as any}
+                    onChange={(e) =>
+                      setCompanionNames((arr) => {
+                        const next = [...arr];
+                        if (!next[i]) next[i] = { name: "" };
+                        next[i].age = e.target.value;
+                        return next;
+                      })
+                    }
+                  />
                 </div>
               ))}
             </div>
           )}
           <div className="rounded-lg overflow-hidden">
             <div className="h-56 w-full">
-              <MapContainer center={start ?? { lat: 23.2645, lng: 77.4205 }} zoom={start ? 16 : 13} className="h-full w-full" whenCreated={(m) => { (window as any)._leaflet_map = m; mapRef.current = m; m.on('click', (e: any) => setDest({ lat: e.latlng.lat, lng: e.latlng.lng })); }}>
+              <MapContainer
+                center={start ?? { lat: 23.2645, lng: 77.4205 }}
+                zoom={start ? 16 : 13}
+                className="h-full w-full"
+                whenCreated={(m) => {
+                  (window as any)._leaflet_map = m;
+                  mapRef.current = m;
+                  m.on("click", (e: any) =>
+                    setDest({ lat: e.latlng.lat, lng: e.latlng.lng }),
+                  );
+                }}
+              >
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                {route?.coords && <Polyline positions={route.coords as any} pathOptions={{ color: '#7dd3fc', weight: 4, opacity: 0.9 }} />}
-                {start && <Marker position={start as any} icon={L.divIcon({ className: 'pulse-marker-start' })} />}
-                {dest && <Marker position={dest as any} icon={L.divIcon({ className: 'pin-dest' })} />}
+                {route?.coords && (
+                  <Polyline
+                    positions={route.coords as any}
+                    pathOptions={{ color: "#7dd3fc", weight: 4, opacity: 0.9 }}
+                  />
+                )}
+                {start && (
+                  <Marker
+                    position={start as any}
+                    icon={L.divIcon({ className: "pulse-marker-start" })}
+                  />
+                )}
+                {dest && (
+                  <Marker
+                    position={dest as any}
+                    icon={L.divIcon({ className: "pin-dest" })}
+                  />
+                )}
               </MapContainer>
             </div>
             <div className="flex items-center justify-between p-2 text-xs">
-              <button className="inline-flex items-center gap-1 rounded-md border px-2 py-1" onClick={() => navigator.geolocation?.getCurrentPosition((p) => { const s = { lat: p.coords.latitude, lng: p.coords.longitude }; setStart(s); (mapRef.current ?? (window as any)._leaflet_map)?.flyTo([s.lat, s.lng], 17, { duration: 0.6 }); }, () => {}, { enableHighAccuracy: true })}>
-                <Crosshair size={14}/> Use current location
+              <button
+                className="inline-flex items-center gap-1 rounded-md border px-2 py-1"
+                onClick={() =>
+                  navigator.geolocation?.getCurrentPosition(
+                    (p) => {
+                      const s = {
+                        lat: p.coords.latitude,
+                        lng: p.coords.longitude,
+                      };
+                      setStart(s);
+                      (mapRef.current ?? (window as any)._leaflet_map)?.flyTo(
+                        [s.lat, s.lng],
+                        17,
+                        { duration: 0.6 },
+                      );
+                    },
+                    () => {},
+                    { enableHighAccuracy: true },
+                  )
+                }
+              >
+                <Crosshair size={14} /> Use current location
               </button>
-              <div className="text-muted-foreground">Tap map to set destination</div>
+              <div className="text-muted-foreground">
+                Tap map to set destination
+              </div>
             </div>
           </div>
           {route && (
             <div className="rounded-md border p-2 text-xs flex items-center justify-between">
               <div>
-                <div>Suggested path ~ {route.distanceKm?.toFixed(1)} km • {Math.round(route.durationMin ?? 0)} min</div>
-                {estCost !== null && <div className="text-muted-foreground">Estimated cost ₹{estCost}</div>}
+                <div>
+                  Suggested path ~ {route.distanceKm?.toFixed(1)} km •{" "}
+                  {Math.round(route.durationMin ?? 0)} min
+                </div>
+                {estCost !== null && (
+                  <div className="text-muted-foreground">
+                    Estimated cost ₹{estCost}
+                  </div>
+                )}
               </div>
               <div className="flex items-center gap-2">
                 <Label className="text-xs">Your cost</Label>
-                <Input className="h-8 w-24" value={userCost} onChange={(e) => setUserCost(e.target.value)} placeholder="₹" />
+                <Input
+                  className="h-8 w-24"
+                  value={userCost}
+                  onChange={(e) => setUserCost(e.target.value)}
+                  placeholder="₹"
+                />
               </div>
             </div>
           )}
           {alternative && (
-            <div className="rounded-md border p-2 text-xs">We found an earlier trip to this destination. You can compare after recording to get an alternative suggestion.</div>
+            <div className="rounded-md border p-2 text-xs">
+              We found an earlier trip to this destination. You can compare
+              after recording to get an alternative suggestion.
+            </div>
           )}
           <div className="flex items-center gap-2 text-xs">
-            <input id="consent" type="checkbox" checked={consent} onChange={(e) => { setConsent(e.target.checked); if (e.target.checked) localStorage.setItem('natpac_consent_v1','1'); }} />
-            <label htmlFor="consent">I consent to share trip data (origin, destination, path, companions) for research by NATPAC.</label>
+            <input
+              id="consent"
+              type="checkbox"
+              checked={consent}
+              onChange={(e) => {
+                setConsent(e.target.checked);
+                if (e.target.checked)
+                  localStorage.setItem("natpac_consent_v1", "1");
+              }}
+            />
+            <label htmlFor="consent">
+              I consent to share trip data (origin, destination, path,
+              companions) for research by NATPAC.
+            </label>
           </div>
-          <Button className="w-full" disabled={!consent} onClick={startTrip}>Start</Button>
+          <Button className="w-full" disabled={!consent} onClick={startTrip}>
+            Start
+          </Button>
         </Card>
 
         <Card className="p-4 text-xs text-muted-foreground">
-          Location access is required. You can change permissions anytime in settings.
+          Location access is required. You can change permissions anytime in
+          settings.
         </Card>
       </section>
     </Layout>

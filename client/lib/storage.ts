@@ -59,7 +59,9 @@ export function listTrips(): TripRecord[] {
   }
 }
 
-export function saveTrip(partial: Omit<TripRecord, "tripId" | "userId">): TripRecord {
+export function saveTrip(
+  partial: Omit<TripRecord, "tripId" | "userId">,
+): TripRecord {
   const trips = listTrips();
   const record: TripRecord = {
     ...partial,
@@ -73,9 +75,28 @@ export function saveTrip(partial: Omit<TripRecord, "tripId" | "userId">): TripRe
 
 export function tripsToCSV(trips: TripRecord[]): string {
   const headers = [
-    "tripId","userId","startedAt","endedAt","mode","purpose","companions","companionsDetails","startLat","startLng","destName","destLat","destLng","distanceKm","costEstimate","costActual","pathPoints","busStops","metro","attractions"
+    "tripId",
+    "userId",
+    "startedAt",
+    "endedAt",
+    "mode",
+    "purpose",
+    "companions",
+    "companionsDetails",
+    "startLat",
+    "startLng",
+    "destName",
+    "destLat",
+    "destLng",
+    "distanceKm",
+    "costEstimate",
+    "costActual",
+    "pathPoints",
+    "busStops",
+    "metro",
+    "attractions",
   ];
-  const rows = trips.map(t => [
+  const rows = trips.map((t) => [
     t.tripId,
     t.userId,
     new Date(t.startedAt).toISOString(),
@@ -97,7 +118,10 @@ export function tripsToCSV(trips: TripRecord[]): string {
     (t.pois?.metro || []).join(";"),
     (t.pois?.attractions || []).join(";"),
   ]);
-  const csv = [headers.join(","), ...rows.map(r => r.map(v => String(v).replaceAll('"', '""')).join(","))].join("\n");
+  const csv = [
+    headers.join(","),
+    ...rows.map((r) => r.map((v) => String(v).replaceAll('"', '""')).join(",")),
+  ].join("\n");
   return csv;
 }
 
@@ -116,12 +140,21 @@ function persistPlaces(arr: Place[]) {
   localStorage.setItem(LS_KEYS.places, JSON.stringify(arr));
 }
 
-export function savePlace(p: Omit<Place, "id" | "createdAt"> & Partial<Pick<Place, "id">>): Place {
+export function savePlace(
+  p: Omit<Place, "id" | "createdAt"> & Partial<Pick<Place, "id">>,
+): Place {
   const all = listPlaces();
   const id = p.id || `P-${Math.random().toString(36).slice(2, 10)}`;
   const existing = all.findIndex((x) => x.id === id);
-  const rec: Place = { id, name: p.name, type: p.type, position: p.position, createdAt: Date.now() };
-  if (existing >= 0) all[existing] = rec; else all.unshift(rec);
+  const rec: Place = {
+    id,
+    name: p.name,
+    type: p.type,
+    position: p.position,
+    createdAt: Date.now(),
+  };
+  if (existing >= 0) all[existing] = rec;
+  else all.unshift(rec);
   persistPlaces(all);
   return rec;
 }
@@ -132,16 +165,28 @@ export function deletePlace(id: string) {
 }
 
 export function upsertHome(position: LatLng): Place {
-  const all = listPlaces().filter(p => p.type !== "home");
-  const rec: Place = { id: "HOME", name: "Home", type: "home", position, createdAt: Date.now() };
+  const all = listPlaces().filter((p) => p.type !== "home");
+  const rec: Place = {
+    id: "HOME",
+    name: "Home",
+    type: "home",
+    position,
+    createdAt: Date.now(),
+  };
   all.unshift(rec);
   persistPlaces(all);
   return rec;
 }
 
 export function upsertWork(position: LatLng): Place {
-  const all = listPlaces().filter(p => p.type !== "work");
-  const rec: Place = { id: "WORK", name: "Work", type: "work", position, createdAt: Date.now() };
+  const all = listPlaces().filter((p) => p.type !== "work");
+  const rec: Place = {
+    id: "WORK",
+    name: "Work",
+    type: "work",
+    position,
+    createdAt: Date.now(),
+  };
   all.unshift(rec);
   persistPlaces(all);
   return rec;
@@ -149,11 +194,13 @@ export function upsertWork(position: LatLng): Place {
 
 export function distanceKm(a: LatLng, b: LatLng): number {
   const R = 6371;
-  const dLat = (b.lat - a.lat) * Math.PI / 180;
-  const dLng = (b.lng - a.lng) * Math.PI / 180;
-  const lat1 = a.lat * Math.PI / 180;
-  const lat2 = b.lat * Math.PI / 180;
-  const x = Math.sin(dLat/2)**2 + Math.sin(dLng/2)**2 * Math.cos(lat1) * Math.cos(lat2);
-  const c = 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1-x));
+  const dLat = ((b.lat - a.lat) * Math.PI) / 180;
+  const dLng = ((b.lng - a.lng) * Math.PI) / 180;
+  const lat1 = (a.lat * Math.PI) / 180;
+  const lat2 = (b.lat * Math.PI) / 180;
+  const x =
+    Math.sin(dLat / 2) ** 2 +
+    Math.sin(dLng / 2) ** 2 * Math.cos(lat1) * Math.cos(lat2);
+  const c = 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x));
   return R * c;
 }

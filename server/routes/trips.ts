@@ -15,7 +15,26 @@ export const postTrip: RequestHandler = (req, res) => {
     ensureDir();
     const t = req.body ?? {};
     const headers = [
-      "tripId","userId","startedAt","endedAt","mode","purpose","companions","companionsDetails","startLat","startLng","destName","destLat","destLng","distanceKm","costEstimate","costActual","pathPoints","busStops","metro","attractions"
+      "tripId",
+      "userId",
+      "startedAt",
+      "endedAt",
+      "mode",
+      "purpose",
+      "companions",
+      "companionsDetails",
+      "startLat",
+      "startLng",
+      "destName",
+      "destLat",
+      "destLng",
+      "distanceKm",
+      "costEstimate",
+      "costActual",
+      "pathPoints",
+      "busStops",
+      "metro",
+      "attractions",
     ];
     const row = [
       t.tripId,
@@ -25,7 +44,9 @@ export const postTrip: RequestHandler = (req, res) => {
       t.mode,
       t.purpose,
       t.companions,
-      Array.isArray(t.companionsDetails) ? JSON.stringify(t.companionsDetails) : "",
+      Array.isArray(t.companionsDetails)
+        ? JSON.stringify(t.companionsDetails)
+        : "",
       t.start?.lat,
       t.start?.lng,
       t.destination?.name ?? "",
@@ -39,8 +60,10 @@ export const postTrip: RequestHandler = (req, res) => {
       Array.isArray(t.pois?.metro) ? t.pois.metro.join(";") : "",
       Array.isArray(t.pois?.attractions) ? t.pois.attractions.join(";") : "",
     ];
-    const line = row.map((v) => String(v ?? "").replaceAll('"','""')).join(",") + "\n";
-    if (!fs.existsSync(csvPath)) fs.writeFileSync(csvPath, headers.join(",") + "\n");
+    const line =
+      row.map((v) => String(v ?? "").replaceAll('"', '""')).join(",") + "\n";
+    if (!fs.existsSync(csvPath))
+      fs.writeFileSync(csvPath, headers.join(",") + "\n");
     fs.appendFileSync(csvPath, line);
     fs.appendFileSync(jsonlPath, JSON.stringify(t) + "\n");
     res.json({ ok: true });
@@ -53,7 +76,10 @@ export const getCSV: RequestHandler = (_req, res) => {
   try {
     ensureDir();
     if (!fs.existsSync(csvPath)) {
-      fs.writeFileSync(csvPath, "tripId,userId,startedAt,endedAt,mode,purpose,companions,companionsDetails,startLat,startLng,destName,destLat,destLng,distanceKm,costEstimate,costActual,pathPoints,busStops,metro,attractions\n");
+      fs.writeFileSync(
+        csvPath,
+        "tripId,userId,startedAt,endedAt,mode,purpose,companions,companionsDetails,startLat,startLng,destName,destLat,destLng,distanceKm,costEstimate,costActual,pathPoints,busStops,metro,attractions\n",
+      );
     }
     res.setHeader("Content-Type", "text/csv");
     res.send(fs.readFileSync(csvPath));
@@ -66,8 +92,21 @@ export const getJSON: RequestHandler = (_req, res) => {
   try {
     ensureDir();
     if (!fs.existsSync(jsonlPath)) return res.json([]);
-    const lines = fs.readFileSync(jsonlPath, "utf-8").trim().split(/\n+/).filter(Boolean);
-    const arr = lines.slice(-200).map((l) => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean);
+    const lines = fs
+      .readFileSync(jsonlPath, "utf-8")
+      .trim()
+      .split(/\n+/)
+      .filter(Boolean);
+    const arr = lines
+      .slice(-200)
+      .map((l) => {
+        try {
+          return JSON.parse(l);
+        } catch {
+          return null;
+        }
+      })
+      .filter(Boolean);
     res.json(arr);
   } catch (e) {
     res.status(500).json({ ok: false, error: String(e) });

@@ -11,10 +11,17 @@ export default function Routes() {
           {routes.map((r) => (
             <Card key={r.id} className="p-3">
               <div className="text-sm font-semibold">{r.name}</div>
-              <div className="text-xs text-muted-foreground">{r.stops.length} stops • Base fare ₹{r.baseFare}</div>
+              <div className="text-xs text-muted-foreground">
+                {r.stops.length} stops • Base fare ₹{r.baseFare}
+              </div>
               <div className="mt-2 flex flex-wrap gap-2">
                 {r.stops.map((s) => (
-                  <span key={s.id} className="rounded bg-secondary px-2 py-1 text-xs">{s.name}</span>
+                  <span
+                    key={s.id}
+                    className="rounded bg-secondary px-2 py-1 text-xs"
+                  >
+                    {s.name}
+                  </span>
                 ))}
               </div>
             </Card>

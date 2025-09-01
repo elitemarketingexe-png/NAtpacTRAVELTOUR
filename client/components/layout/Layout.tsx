@@ -16,15 +16,27 @@ export function Header() {
           </div>
           <div className="leading-tight">
             <div className="text-sm font-semibold">NATPAC</div>
-            <div className="text-[11px] text-muted-foreground">Travel Data Logger</div>
+            <div className="text-[11px] text-muted-foreground">
+              Travel Data Logger
+            </div>
           </div>
         </Link>
         <div className="flex items-center gap-3">
           {role === "admin" && (
-            <Link to="/admin" className="inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs hover:bg-accent hover:text-accent-foreground">Admin</Link>
+            <Link
+              to="/admin"
+              className="inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs hover:bg-accent hover:text-accent-foreground"
+            >
+              Admin
+            </Link>
           )}
           {(role === "gov" || role === "admin") && (
-            <Link to="/gov" className="inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs hover:bg-accent hover:text-accent-foreground">NATPAC</Link>
+            <Link
+              to="/gov"
+              className="inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs hover:bg-accent hover:text-accent-foreground"
+            >
+              NATPAC
+            </Link>
           )}
           <Link
             to="/trips"
@@ -37,7 +49,10 @@ export function Header() {
           </button>
           <button
             className="inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs hover:bg-accent hover:text-accent-foreground"
-            onClick={() => { logout(); navigate('/auth'); }}
+            onClick={() => {
+              logout();
+              navigate("/auth");
+            }}
           >
             <LogOut size={14} /> Logout
           </button>

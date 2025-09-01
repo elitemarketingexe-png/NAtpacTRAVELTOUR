@@ -37,15 +37,24 @@ export default function Auth() {
           <div className="space-y-3">
             <div className="grid gap-2">
               <Label>Username</Label>
-              <Input value={username} onChange={(e)=>setUsername(e.target.value)} placeholder="user | admin | gov" />
+              <Input
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="user | admin | gov"
+              />
             </div>
             <div className="grid gap-2">
               <Label>Password</Label>
-              <Input type="password" value={password} onChange={(e)=>setPassword(e.target.value)} placeholder="123" />
+              <Input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="123"
+              />
             </div>
             {error && <div className="text-sm text-destructive">{error}</div>}
             <Button className="w-full" disabled={loading} onClick={submit}>
-              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
+              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Sign in
             </Button>
             <div className="text-xs text-muted-foreground">

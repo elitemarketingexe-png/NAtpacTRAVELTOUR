@@ -7,7 +7,7 @@ export function BottomNav() {
     { to: "/", label: "Home", icon: Home },
     { to: "/places", label: "Places", icon: MapPin },
     { to: "/trips", label: "Trips", icon: List },
-    { to: "/profile", label: "Profile", icon: User }
+    { to: "/profile", label: "Profile", icon: User },
   ];
   return (
     <nav className="sticky bottom-0 z-30 border-t bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -19,7 +19,9 @@ export function BottomNav() {
             className={({ isActive }) =>
               cn(
                 "flex flex-col items-center justify-center gap-1 py-2 text-xs",
-                isActive ? "text-primary" : "text-muted-foreground hover:text-foreground",
+                isActive
+                  ? "text-primary"
+                  : "text-muted-foreground hover:text-foreground",
               )
             }
           >

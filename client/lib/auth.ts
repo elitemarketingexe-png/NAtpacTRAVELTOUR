@@ -8,7 +8,10 @@ export function getRole(): Role | null {
 export function isAuthed() {
   return getRole() !== null;
 }
-export function loginWithCredentials(username: string, password: string): Role | null {
+export function loginWithCredentials(
+  username: string,
+  password: string,
+): Role | null {
   const table: Record<string, { pass: string; role: Role }> = {
     user: { pass: "123", role: "user" },
     admin: { pass: "123", role: "admin" },

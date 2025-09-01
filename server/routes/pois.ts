@@ -27,9 +27,9 @@ async function fetchOverpass(q: string, timeoutMs = 20000): Promise<any> {
       const res = await fetch(url, {
         signal: ac.signal,
         headers: {
-          "Accept": "application/json",
+          Accept: "application/json",
           // Helpful but optional
-          "User-Agent": "fusion-starter/pois (+https://builder.io)"
+          "User-Agent": "fusion-starter/pois (+https://builder.io)",
         },
       });
       if (!res.ok) {
@@ -53,8 +53,12 @@ export const getPois: RequestHandler = async (req, res) => {
   try {
     const lat = Number(req.query.lat);
     const lng = Number(req.query.lng);
-    const radius = Math.min(Math.max(Number(req.query.radius ?? 1200), 200), 5000);
-    if (!isFinite(lat) || !isFinite(lng)) return res.status(400).json({ error: "invalid lat/lng" });
+    const radius = Math.min(
+      Math.max(Number(req.query.radius ?? 1200), 200),
+      5000,
+    );
+    if (!isFinite(lat) || !isFinite(lng))
+      return res.status(400).json({ error: "invalid lat/lng" });
 
     const k = keyFor(lat, lng, radius);
     const now = Date.now();
@@ -80,7 +84,8 @@ export const getPois: RequestHandler = async (req, res) => {
       const tags = (el as any).tags ?? {};
       const name = tags.name || tags.ref || "Unnamed";
       if (tags.highway === "bus_stop") busStops.push(name);
-      else if (tags.railway === "station" || tags.railway === "subway_entrance") metro.push(name);
+      else if (tags.railway === "station" || tags.railway === "subway_entrance")
+        metro.push(name);
       else if (tags.tourism === "attraction") attractions.push(name);
     }
 

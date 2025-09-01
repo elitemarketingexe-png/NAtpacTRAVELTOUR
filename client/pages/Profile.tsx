@@ -11,7 +11,9 @@ export default function Profile() {
           <div className="text-sm font-semibold">AI VLOGS</div>
           <div className="text-xs text-muted-foreground">admin</div>
           <div className="pt-2 flex gap-2">
-            <Button size="sm" variant="secondary">Edit profile</Button>
+            <Button size="sm" variant="secondary">
+              Edit profile
+            </Button>
             <Button size="sm">Upgrade</Button>
           </div>
         </Card>

@@ -24,12 +24,19 @@ export default function Index() {
             </button>
           </div>
           <div className="mt-3 flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-foreground/20"><User size={16} /></div>
-            <div className="flex-1 rounded-lg bg-primary-foreground/15 px-3 py-2 text-sm">Alex Chen</div>
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-foreground/20">
+              <User size={16} />
+            </div>
+            <div className="flex-1 rounded-lg bg-primary-foreground/15 px-3 py-2 text-sm">
+              Alex Chen
+            </div>
           </div>
           <div className="mt-3">
-            <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90" onClick={() => navigate("/trip/start")}>
-              <PlayCircle className="mr-2 h-4 w-4"/> Start New Trip
+            <Button
+              className="w-full bg-accent text-accent-foreground hover:bg-accent/90"
+              onClick={() => navigate("/trip/start")}
+            >
+              <PlayCircle className="mr-2 h-4 w-4" /> Start New Trip
             </Button>
           </div>
         </div>
@@ -38,7 +45,9 @@ export default function Index() {
           <Card className="p-3">
             <div className="grid grid-cols-3 text-center">
               <div>
-                <div className="text-xs text-muted-foreground">Today's Trips</div>
+                <div className="text-xs text-muted-foreground">
+                  Today's Trips
+                </div>
                 <div className="text-lg font-semibold">1</div>
               </div>
               <div>
@@ -46,7 +55,9 @@ export default function Index() {
                 <div className="text-lg font-semibold">7</div>
               </div>
               <div>
-                <div className="text-xs text-muted-foreground">Data Complete</div>
+                <div className="text-xs text-muted-foreground">
+                  Data Complete
+                </div>
                 <div className="text-lg font-semibold text-green-500">92%</div>
               </div>
             </div>
@@ -56,21 +67,31 @@ export default function Index() {
             <Card className="p-3 flex items-center justify-between">
               <div>
                 <div className="text-sm font-semibold">My Plans</div>
-                <div className="text-xs text-muted-foreground">View and manage trips</div>
+                <div className="text-xs text-muted-foreground">
+                  View and manage trips
+                </div>
               </div>
-              <Button size="sm" variant="secondary" asChild><Link to="/trips">Open</Link></Button>
+              <Button size="sm" variant="secondary" asChild>
+                <Link to="/trips">Open</Link>
+              </Button>
             </Card>
             <Card className="p-3 flex items-center justify-between">
               <div>
                 <div className="text-sm font-semibold">Places I Visit</div>
-                <div className="text-xs text-muted-foreground">Home, Work, etc.</div>
+                <div className="text-xs text-muted-foreground">
+                  Home, Work, etc.
+                </div>
               </div>
-              <Button size="sm" variant="secondary" asChild><Link to="/places">Open</Link></Button>
+              <Button size="sm" variant="secondary" asChild>
+                <Link to="/places">Open</Link>
+              </Button>
             </Card>
             <Card className="p-3 flex items-center justify-between">
               <div>
                 <div className="text-sm font-semibold">Data Sync</div>
-                <div className="text-xs text-muted-foreground">Last synced 5 min ago</div>
+                <div className="text-xs text-muted-foreground">
+                  Last synced 5 min ago
+                </div>
               </div>
               <Button size="sm">Sync</Button>
             </Card>
@@ -79,7 +100,9 @@ export default function Index() {
           <div className="space-y-2">
             <h2 className="text-sm font-semibold">My Travel Hub</h2>
             <Card className="p-3 text-sm">Social sharing & collaboration</Card>
-            <Card className="p-3 text-sm">Recent: Office → Market • 12.4 km • Bus</Card>
+            <Card className="p-3 text-sm">
+              Recent: Office → Market • 12.4 km • Bus
+            </Card>
           </div>
         </div>
 
