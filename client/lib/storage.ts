@@ -1,4 +1,5 @@
 export type LatLng = { lat: number; lng: number };
+export type Companion = { name?: string; age?: number | null };
 export type TripRecord = {
   tripId: string;
   userId: string;
@@ -7,6 +8,7 @@ export type TripRecord = {
   mode: string;
   purpose: string;
   companions: number;
+  companionsDetails?: Companion[];
   start: LatLng;
   destination?: { name?: string; position?: LatLng };
   path: LatLng[];
@@ -62,7 +64,7 @@ export function saveTrip(partial: Omit<TripRecord, "tripId" | "userId">): TripRe
 
 export function tripsToCSV(trips: TripRecord[]): string {
   const headers = [
-    "tripId","userId","startedAt","endedAt","mode","purpose","companions","startLat","startLng","destName","destLat","destLng","distanceKm","costEstimate","costActual","pathPoints","busStops","metro","attractions"
+    "tripId","userId","startedAt","endedAt","mode","purpose","companions","companionsDetails","startLat","startLng","destName","destLat","destLng","distanceKm","costEstimate","costActual","pathPoints","busStops","metro","attractions"
   ];
   const rows = trips.map(t => [
     t.tripId,
@@ -72,6 +74,7 @@ export function tripsToCSV(trips: TripRecord[]): string {
     t.mode,
     t.purpose,
     t.companions,
+    t.companionsDetails ? JSON.stringify(t.companionsDetails) : "",
     t.start.lat,
     t.start.lng,
     t.destination?.name ?? "",
