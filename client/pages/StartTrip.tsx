@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Bus, Car, Footprints, Train, Minus, Plus, Crosshair, MapPin } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MapContainer, TileLayer, Marker } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Polyline } from "react-leaflet";
 import L from "leaflet";
 import { listTrips } from "@/lib/storage";
 
