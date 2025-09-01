@@ -12,6 +12,7 @@ import Profile from "./pages/Profile";
 import Auth from "./pages/Auth";
 import Places from "./pages/Places";
 import Trips from "./pages/Trips";
+import TripDetail from "./pages/TripDetail";
 import StartTrip from "./pages/StartTrip";
 import ActiveTrip from "./pages/ActiveTrip";
 import Admin from "./pages/Admin";
