@@ -1,22 +1,25 @@
 import Layout from "@/components/layout/Layout";
 import { Card } from "@/components/ui/card";
+import { listTrips } from "@/lib/storage";
+
+function fmt(n: number) { const d = new Date(n); return d.toLocaleString(); }
 
 export default function Trips() {
-  const sample = [
-    { id: 1, date: "2025-09-01", from: "Home", to: "NATPAC Office", mode: "Bus", duration: "32m" },
-    { id: 2, date: "2025-08-31", from: "Market", to: "Home", mode: "Walk", duration: "12m" }
-  ];
+  const trips = listTrips();
   return (
     <Layout>
       <section className="mx-auto w-full max-w-5xl px-4 py-4 space-y-4">
         <h1 className="text-lg font-semibold">My Trips</h1>
-        {sample.map((t) => (
-          <Card key={t.id} className="p-3 text-sm flex items-center justify-between">
+        {trips.length === 0 && <Card className="p-4 text-sm text-muted-foreground">No trips yet. Start one from Home.</Card>}
+        {trips.map((t) => (
+          <Card key={t.tripId} className="p-3 text-sm flex items-center justify-between">
             <div>
-              <div className="font-medium">{t.from} → {t.to}</div>
-              <div className="text-xs text-muted-foreground">{t.date} • {t.mode} • {t.duration}</div>
+              <div className="font-medium">{t.purpose || "Trip"} • {t.mode}</div>
+              <div className="text-xs text-muted-foreground">{fmt(t.startedAt)} → {fmt(t.endedAt)} • {t.path.length} pts</div>
+              {!!t.destination?.name && <div className="text-xs">Dest: {t.destination.name}</div>}
+              {t.pois && <div className="text-xs text-muted-foreground">Nearby: {t.pois.busStops.slice(0,2).join(", ")} {t.pois.metro.slice(0,1).join(", ")} {t.pois.attractions.slice(0,2).join(", ")}</div>}
             </div>
-            <a className="text-primary hover:underline" href="#">View</a>
+            <div className="text-xs text-muted-foreground">{t.tripId}</div>
           </Card>
         ))}
       </section>
