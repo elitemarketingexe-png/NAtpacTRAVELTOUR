@@ -21,6 +21,9 @@ export function createServer() {
 
   app.get("/api/demo", handleDemo);
 
+  // POIs proxy
+  app.get("/api/pois", getPois);
+
   // Trips API
   app.post("/api/trips", postTrip);
   app.get("/api/trips/csv", getCSV);
