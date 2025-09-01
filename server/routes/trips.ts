@@ -4,6 +4,7 @@ import path from "path";
 
 const dataDir = path.resolve(process.cwd(), "server", "data");
 const csvPath = path.join(dataDir, "trips.csv");
+const jsonlPath = path.join(dataDir, "trips.jsonl");
 
 function ensureDir() {
   if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
