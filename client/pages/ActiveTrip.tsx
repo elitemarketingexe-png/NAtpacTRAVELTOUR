@@ -36,6 +36,9 @@ function useQuery() {
     start: params.get("slat") && params.get("slng") ? [Number(params.get("slat")), Number(params.get("slng"))] as [number, number] : undefined,
     dest: params.get("dlat") && params.get("dlng") ? [Number(params.get("dlat")), Number(params.get("dlng"))] as [number, number] : undefined,
     dname: params.get("dname") ?? undefined,
+    est: params.get("est") ? Number(params.get("est")) : undefined,
+    dist: params.get("dist") ? Number(params.get("dist")) : undefined,
+    cost: params.get("cost") ? Number(params.get("cost")) : undefined,
   } as const;
 }
 
