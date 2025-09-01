@@ -28,7 +28,17 @@ export function TripCard({ trip, index }: { trip: TripRecord; index: number }) {
       transition={{ duration: 0.35, delay: index * 0.03, ease: [0.22, 1, 0.36, 1] }}
     >
       <Link to={`/trip/${trip.tripId}`} className="block">
-        <Card className="relative overflow-hidden p-3 text-sm group">
+        <Card
+          className="relative overflow-hidden p-3 text-sm group"
+          onPointerMove={(e) => {
+            const el = e.currentTarget as HTMLElement;
+            const rect = el.getBoundingClientRect();
+            const mx = ((e.clientX - rect.left) / rect.width) * 100;
+            const my = ((e.clientY - rect.top) / rect.height) * 100;
+            el.style.setProperty("--mx", `${mx}%`);
+            el.style.setProperty("--my", `${my}%`);
+          }}
+        >
           <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background:
             "radial-gradient(600px circle at var(--mx,50%) var(--my,50%), rgba(56,189,248,0.08), transparent 40%)" }} />
           <div className="flex items-start justify-between gap-3">
