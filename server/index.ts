@@ -23,6 +23,7 @@ export function createServer() {
   // Trips API
   app.post("/api/trips", postTrip);
   app.get("/api/trips/csv", getCSV);
+  app.get("/api/trips/json", getJSON);
 
   return app;
 }
