@@ -13,11 +13,15 @@ export async function fetchNearbyPois(lat: number, lng: number): Promise<PoiResu
     );
     out tags;`;
   try {
-    const res = await fetch(overpass, { method: "POST", body: q, headers: { "Content-Type": "application/x-www-form-urlencoded" } });
+    const controller = new AbortController();
+    const t = setTimeout(() => controller.abort(), 12000);
+    const res = await fetch(`${overpass}?data=${encodeURIComponent(q)}`, { signal: controller.signal });
+    clearTimeout(t);
+    if (!res.ok) throw new Error("overpass bad status");
     const data = await res.json();
-    const busStops = [] as string[];
-    const metro = [] as string[];
-    const attractions = [] as string[];
+    const busStops: string[] = [];
+    const metro: string[] = [];
+    const attractions: string[] = [];
     for (const el of data.elements ?? []) {
       const name = el.tags?.name || el.tags?.ref || "Unnamed";
       if (el.tags?.highway === "bus_stop") busStops.push(name);

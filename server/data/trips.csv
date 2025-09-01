@@ -1,1 +1,3 @@
 tripId,userId,startedAt,endedAt,mode,purpose,companions,startLat,startLng,destName,destLat,destLng,distanceKm,costEstimate,costActual,pathPoints,busStops,metro,attractions
+T-000003,U-t1xefn,2025-09-01T20:35:48.852Z,2025-09-01T20:36:18.487Z,bus,Shopping,0,[],28.633338742873036,77.46949211597314,gaur city mall, Vikas Marg, Noida, Dadri, Gautam Buddha Nagar, Uttar Pradesh, 201318, India,28.6061672,77.429513,,,,2,,,
+T-000004,U-t1xefn,2025-09-01T20:35:48.852Z,2025-09-01T20:36:18.665Z,bus,Shopping,0,[],28.633338742873036,77.46949211597314,gaur city mall, Vikas Marg, Noida, Dadri, Gautam Buddha Nagar, Uttar Pradesh, 201318, India,28.6061672,77.429513,,,,2,,,
