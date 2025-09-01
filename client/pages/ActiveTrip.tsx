@@ -73,7 +73,13 @@ export default function ActiveTrip() {
       path,
       stops,
       pois,
-    });
+      distanceKm: q.dist,
+      costEstimate: q.est,
+      costActual: q.cost,
+    } as any);
+    try {
+      await fetch('/api/trips', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(record) });
+    } catch {}
     window.location.href = "/trips";
   };
 
